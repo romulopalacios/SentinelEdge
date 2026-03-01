@@ -1,0 +1,56 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .gitignore — Plataforma de Seguridad Perimetral
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Entornos y secretos
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.next/
+
+# Docker
+.docker/
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Volúmenes locales de desarrollo
+infrastructure/postgres/data/
+infrastructure/rabbitmq/data/
+infrastructure/redis/data/

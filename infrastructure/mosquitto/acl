@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Mosquitto ACL — SentinelEdge
+# Controls topic-level publish/subscribe permissions per user.
+# Syntax: topic [read|write|readwrite] <topic-pattern>
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Service backend account ───────────────────────────────────────────────────
+# sentinel_ingestion: publishes nothing for itself, subscribes to receive all
+# sensor events (paho does the pub on behalf of sensors in tests, but in
+# production it only SUBSCRIBES here and IoT devices publish directly).
+user sentinel_ingestion
+topic readwrite sentineledge/#
+topic read $SYS/#
+
+# ── IoT device accounts (per-tenant isolation) ───────────────────────────────
+# A device belonging to tenant "demo-corp" can only publish to its own prefix.
+# Add one stanza per registered tenant here (regenerate or use plugin in prod).
+#
+# user device_demo_corp
+# topic write sentineledge/demo-corp/sensors/+/events
+#
+# Devices must NEVER subscribe (only the ingestion service consumes).
+# Remove the above stanza and use a dedicated per-device user + dynamic ACL
+# plugin (e.g. mosquitto-go-auth) when scaling beyond a handful of tenants.
+
+# ── Deny everything not explicitly allowed ────────────────────────────────────
+# Mosquitto denies by default when allow_anonymous false + acl_file is set;
+# this comment is documentation only — no explicit deny syntax needed.

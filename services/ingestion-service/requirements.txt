@@ -1,0 +1,20 @@
+# ─── Core ────────────────────────────────────────────────────────────────────
+paho-mqtt==2.1.0          # Cliente MQTT
+aio-pika==9.4.1           # Cliente RabbitMQ async
+asyncpg==0.29.0           # PostgreSQL async (sensor lookup)
+
+# ─── Validación y schemas ────────────────────────────────────────────────────
+pydantic==2.7.1
+pydantic-settings==2.2.1
+
+# ─── HTTP / Health check ─────────────────────────────────────────────────────
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+
+# ─── Observabilidad ──────────────────────────────────────────────────────────
+structlog==24.2.0
+python-json-logger==2.0.7
+
+# ─── Utils ───────────────────────────────────────────────────────────────────
+python-dotenv==1.0.1
+tenacity==8.3.0           # Retry logic

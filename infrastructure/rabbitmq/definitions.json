@@ -1,0 +1,214 @@
+{
+  "rabbit_version": "3.13.0",
+  "rabbitmq_version": "3.13.0",
+  "users": [
+    {
+      "name": "perimetral_rmq",
+      "password_hash": "/7EOK2XbwncZ7RO8zy7s9mysQs8UOcul7e6nlnfXQC6mIZAW",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": ["administrator"]
+    }
+  ],
+  "vhosts": [
+    { "name": "perimetral" }
+  ],
+  "permissions": [
+    {
+      "user": "perimetral_rmq",
+      "vhost": "perimetral",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "perimetral.ingestion",
+      "vhost": "perimetral",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "perimetral.processed",
+      "vhost": "perimetral",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "perimetral.alerts",
+      "vhost": "perimetral",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "perimetral.dlx",
+      "vhost": "perimetral",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "rule-engine-queue",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "perimetral.dlx",
+        "x-dead-letter-routing-key": "dlq.rule-engine",
+        "x-message-ttl": 300000,
+        "x-max-length": 100000
+      }
+    },
+    {
+      "name": "query-persist-queue",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "perimetral.dlx",
+        "x-dead-letter-routing-key": "dlq.query-persist",
+        "x-message-ttl": 300000,
+        "x-max-length": 200000
+      }
+    },
+    {
+      "name": "alert-service-queue",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "perimetral.dlx",
+        "x-dead-letter-routing-key": "dlq.alert-service",
+        "x-message-ttl": 300000,
+        "x-max-length": 50000
+      }
+    },
+    {
+      "name": "alert-notify-queue",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-dead-letter-exchange": "perimetral.dlx",
+        "x-dead-letter-routing-key": "dlq.alert-notify",
+        "x-message-ttl": 600000,
+        "x-max-length": 10000
+      }
+    },
+    {
+      "name": "dlq.rule-engine",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "dlq.query-persist",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "dlq.alert-service",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "dlq.alert-notify",
+      "vhost": "perimetral",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "perimetral.ingestion",
+      "vhost": "perimetral",
+      "destination": "rule-engine-queue",
+      "destination_type": "queue",
+      "routing_key": "event.#",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.processed",
+      "vhost": "perimetral",
+      "destination": "query-persist-queue",
+      "destination_type": "queue",
+      "routing_key": "event.#",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.processed",
+      "vhost": "perimetral",
+      "destination": "alert-service-queue",
+      "destination_type": "queue",
+      "routing_key": "event.critical",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.processed",
+      "vhost": "perimetral",
+      "destination": "alert-service-queue",
+      "destination_type": "queue",
+      "routing_key": "event.high",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.alerts",
+      "vhost": "perimetral",
+      "destination": "alert-notify-queue",
+      "destination_type": "queue",
+      "routing_key": "alert.#",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.dlx",
+      "vhost": "perimetral",
+      "destination": "dlq.rule-engine",
+      "destination_type": "queue",
+      "routing_key": "dlq.rule-engine",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.dlx",
+      "vhost": "perimetral",
+      "destination": "dlq.query-persist",
+      "destination_type": "queue",
+      "routing_key": "dlq.query-persist",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.dlx",
+      "vhost": "perimetral",
+      "destination": "dlq.alert-service",
+      "destination_type": "queue",
+      "routing_key": "dlq.alert-service",
+      "arguments": {}
+    },
+    {
+      "source": "perimetral.dlx",
+      "vhost": "perimetral",
+      "destination": "dlq.alert-notify",
+      "destination_type": "queue",
+      "routing_key": "dlq.alert-notify",
+      "arguments": {}
+    }
+  ]
+}

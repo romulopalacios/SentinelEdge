@@ -337,7 +337,7 @@ Cuando el Rule Engine dispara una alerta, el Alert Service ejecuta las acciones 
 SMTP_HOST=smtp.tuempresa.com
 SMTP_PORT=587
 SMTP_USER=alertas@tuempresa.com
-SMTP_PASS=secreto
+SMTP_PASS=<your-smtp-password>
 ALERT_EMAIL_RECIPIENT=ops@tuempresa.com
 
 # Slack

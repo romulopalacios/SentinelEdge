@@ -209,8 +209,7 @@ INSERT INTO tenants (name, slug, plan) VALUES
 ON CONFLICT (slug) DO NOTHING;
 
 -- ─── SEED: Usuario admin de desarrollo ────────────────────────────────────────
--- Contraseña: test1234  (bcrypt $2b$10$, cost=10)
--- Cambiar en producción
+-- Contraseña definida mediante hash bcrypt (cost=10) — cambiar en producción
 INSERT INTO users (tenant_id, email, password_hash, full_name, role)
 VALUES (
     (SELECT id FROM tenants WHERE slug = 'demo-corp'),
@@ -221,7 +220,7 @@ VALUES (
 )
 ON CONFLICT (tenant_id, email) DO NOTHING;
 
--- ─── SEED: Admin user (password: test1234) ────────────────────────────────────
+-- ─── SEED: Admin user ────────────────────────────────────────────────────────
 INSERT INTO users (tenant_id, email, password_hash, full_name, role)
 SELECT
     t.id,

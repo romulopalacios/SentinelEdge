@@ -91,11 +91,6 @@ export function LoginPage() {
             {loading ? "Signing in…" : "Sign in"}
           </Button>
         </form>
-
-        {/* Dev hint */}
-        <p className="text-center text-xs text-muted-foreground/60">
-          dev: admin@demo.com / test1234 / demo-corp
-        </p>
       </div>
     </div>
   );

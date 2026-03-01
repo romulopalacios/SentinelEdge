@@ -29,7 +29,7 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-perimetral_db}
       POSTGRES_USER: ${POSTGRES_USER:-perimetral_user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-perimetral_pass}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TIMESCALEDB_TELEMETRY: "off"
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-perimetral_rmq}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-perimetral_rmq_pass}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
       RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-perimetral}
     ports:
       - "${RABBITMQ_AMQP_PORT:-5672}:5672"
@@ -178,7 +178,7 @@ services:
     env_file: ../.env
     environment:
       PORT: ${AUTH_SERVICE_PORT:-3001}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-perimetral_user}:${POSTGRES_PASSWORD:-perimetral_pass}@postgres:5432/${POSTGRES_DB:-perimetral_db}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-perimetral_user}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-perimetral_db}
       REDIS_URL: redis://redis:6379
       JWT_SECRET: ${JWT_SECRET}
       JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN:-15m}

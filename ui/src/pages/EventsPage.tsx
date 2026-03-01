@@ -13,7 +13,7 @@ export function EventsPage() {
   const [severityFilter, setSeverityFilter] = useState<string>("all");
   const { data, isLoading } = useEvents({
     severity: severityFilter !== "all" ? (severityFilter as Severity) : undefined,
-    size: 50,
+    page_size: 50,
   });
 
   return (

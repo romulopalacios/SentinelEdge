@@ -1,4 +1,4 @@
-import { Bell, Activity, Cpu, AlertTriangle, TrendingUp, ShieldAlert } from "lucide-react";
+import { Bell, Cpu, AlertTriangle, TrendingUp, ShieldAlert } from "lucide-react";
 import { Topbar } from "@/components/layout/Topbar";
 import { StatCard } from "@/components/ui/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

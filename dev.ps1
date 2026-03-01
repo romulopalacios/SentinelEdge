@@ -100,6 +100,7 @@ switch ($prefix) {
         Write-Host "  - Redis                    -> localhost:6379"
         Write-Host "  - MQTT Broker (Mosquitto)  -> localhost:1883  (WS: 9001)"
         Write-Host "  - Nginx API Gateway        -> http://localhost:80"
+        Write-Host "  - SentinelEdge UI          -> http://localhost:80     (React dashboard)"
         Write-Host "  --- Microservicios -------------------------------------------"
         Write-Host "  - Auth Service             -> (via gateway) /api/v1/auth/"
         Write-Host "  - Query API Service        -> (via gateway) /api/v1/events|alerts|sensors|rules"
@@ -124,6 +125,25 @@ switch ($prefix) {
         Assert-EnvFile
         Write-Header "Reconstruyendo imágenes de microservicios"
         docker compose --env-file $ENV_FILE -f $COMPOSE_FILE build $APP_SERVICES
+    }
+
+    "ui:build" {
+        Write-Header "Compilando UI (React/Vite)"
+        Push-Location "ui"
+        npm run build
+        Pop-Location
+        Write-Host "  UI compilada en ui/dist/" -ForegroundColor Green
+        Write-Host "  Recarga nginx para aplicar cambios:" -ForegroundColor Yellow
+        Write-Host "    docker exec perimetral_nginx nginx -s reload" -ForegroundColor Cyan
+    }
+
+    "ui:dev" {
+        Write-Header "Iniciando UI en modo desarrollo"
+        Write-Host "  Dev server: http://localhost:5173 (proxy -> http://localhost:80)" -ForegroundColor Cyan
+        Write-Host "  Ctrl+C para detener" -ForegroundColor Yellow
+        Push-Location "ui"
+        npm run dev
+        Pop-Location
     }
 
     "logs" {
@@ -250,6 +270,10 @@ switch ($prefix) {
         Write-Host "    rmq           -> Abre RabbitMQ Management en browser"
         Write-Host "    mqtt:setup    -> Configura usuario/password en Mosquitto"
         Write-Host "    mqtt:test     -> Publica evento MQTT de prueba"
+        Write-Host ""
+        Write-Host "  UI:"
+        Write-Host "    ui:build      -> Compila React/Vite -> ui/dist/ (sirve via nginx)"
+        Write-Host "    ui:dev        -> Dev server en localhost:5173 con hot-reload"
         Write-Host ""
     }
 }

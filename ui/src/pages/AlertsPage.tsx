@@ -18,7 +18,7 @@ export function AlertsPage() {
   const { data, isLoading } = useAlerts({
     status:   statusFilter   !== "all" ? (statusFilter as AlertStatus) : undefined,
     severity: severityFilter !== "all" ? (severityFilter as Severity)  : undefined,
-    size: 50,
+    page_size: 50,
   });
 
   const { mutate: acknowledge } = useAcknowledgeAlert();
